@@ -1,5 +1,6 @@
 package com.example.premierleagueapp4;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -28,8 +29,6 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     ListView listView;
-    private String url ="https://applicationbackend.azurewebsites.net/api/";
-    private String TAG ="premierleagueinfo";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,60 +55,21 @@ public class MainActivity extends AppCompatActivity {
 
                 String test = whatever.getItem(position).toString();
 
-                premierLeagueCall(view, test);
+
+                Intent myIntent = new Intent(MainActivity.this, SecondActivity.class);
+
+                myIntent.putExtra("testValue", test);
+
+                startActivity(myIntent);
+
+
+                //premierLeagueCall(view, test);
 
                 //Toast.makeText(getApplicationContext(), test, Toast.LENGTH_SHORT).show();
             }
         });
 
 
-    }
-
-
-    public void premierLeagueCall(View v, String team){
-        final TextView onClickText = findViewById(R.id.textView4);
-
-        try
-        {
-            // make a string request (JSON request an alternative)
-            RequestQueue queue = Volley.newRequestQueue(this);
-            Log.d(TAG, "Making request");
-            try
-            {
-                StringRequest strObjRequest = new StringRequest(Request.Method.GET, url+"club/"+team,
-                        new Response.Listener<String>()
-                        {
-                            @Override
-                            public void onResponse(String response)
-                            {
-                                // parse resulting string containing JSON to Greeting object
-                                premierLeagueClass greeting = new Gson().fromJson(response, premierLeagueClass.class);
-                                 onClickText.setText(greeting.toString());
-                                Log.d(TAG, "Displaying data" + greeting.toString());
-                            }
-                        },
-                        new Response.ErrorListener()
-                        {
-                            @Override
-                            public void onErrorResponse(VolleyError error)
-                            {
-                                onClickText.setText(error.toString());
-                                Log.d(TAG, "Error" + error.toString());
-                            }
-                        });
-                queue.add(strObjRequest);           // can have multiple in a queue, and can cancel
-            }
-            catch (Exception e1)
-            {
-                Log.d(TAG, e1.toString());
-                onClickText.setText(e1.toString());
-            }
-        }
-        catch (Exception e2)
-        {
-            Log.d(TAG, e2.toString());
-            onClickText.setText(e2.toString());
-        }
     }
 
 
